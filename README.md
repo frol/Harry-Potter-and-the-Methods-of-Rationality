@@ -29,3 +29,18 @@ There are three steps:
 1. Download .html files of missing chapters and save them into `part_N.html`;
 1. Use `parser/parser.sh` to generate new `blocks/part_N.tex`;
 1. Run `make` command in `book` folder to build a PDF.
+
+
+Build requirements
+------------------
+
+I'm doing all the work on Ubuntu 14.04 though it doesn't have any strict
+requirements to the environment.
+
+* bash
+* sed
+* grep
+* make
+* latex (I use Texlive-base 2013.20140215-1, but I believe early versions will
+  work as well)
+* ps2pdf

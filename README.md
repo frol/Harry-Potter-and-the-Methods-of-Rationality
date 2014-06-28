@@ -18,7 +18,7 @@ up-to-date version of a book-style PDF.
 How to read?
 ------------
 
-Open build/book.pdf and start reading! Enjoy it!
+Open `book/build/book.pdf` and start reading! Enjoy it!
 
 
 How to update and build?
@@ -26,6 +26,6 @@ How to update and build?
 
 There are three steps:
 
-1. Download .html files of missing chapters and save them into `part\_N.html`;
-1. Use `parser/parser.sh` to generate new `blocks/part\_N.tex`;
+1. Download .html files of missing chapters and save them into `part_N.html`;
+1. Use `parser/parser.sh` to generate new `blocks/part_N.tex`;
 1. Run `make` command in `book` folder to build a PDF.

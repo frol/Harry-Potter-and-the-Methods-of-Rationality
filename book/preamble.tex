@@ -1,0 +1,216 @@
+% Copyright 2013 Frol (c) <frolvlad@gmail.com>
+% 
+%/
+
+%\documentclass[10pt,dropping,showtrims]{memoir}
+\documentclass[10pt,dropping]{memoir}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+%\usepackage{literat}
+\usepackage[english, russian]{babel}
+\usepackage[unicode,linktocpage=true]{hyperref}
+
+\usepackage{enumerate}      % for changing enumeration appearance
+\usepackage{graphicx}		% including pictures and graphics to the document
+%\usepackage[pdftex]{graphicx}
+\usepackage{indentfirst}	% for indenting first paragraph line
+\usepackage{wrapfig}		% for text wrapping around pictures
+\usepackage{pscyr}			% Cyrillic fonts
+\usepackage{gensymb}		% degree and Celsius sign using
+\usepackage{geometry}		% page customizations
+%\usepackage[none]{hyphenat} % disable word breaking
+\usepackage{hyphenat}       % word breaking
+\sloppy                     % deny words cross right margin
+
+\usepackage{lettrine}       % use scalalable (Type 1) fonts to obtain nice results
+\usepackage{etoolbox}       % required by pst-barcode for QR codes
+\usepackage{pst-barcode}    % QR codes
+
+% ===[ Page settings ]===
+
+\setstocksize{200mm}{143mm}
+\settrimmedsize{\dimexpr \stockheight}{\dimexpr \stockwidth}{*}
+%\settrimmedsize{\stockheight}{105mm}{*}
+%\settrims{18mm}{10mm}
+\settypeblocksize{\dimexpr \stockheight-18mm-20mm}{\dimexpr \stockwidth-10mm-16mm}{*}
+\setlrmargins{*}{*}{1.6}
+\setulmargins{*}{*}{1}
+%\setmarginnotes{50mm}{50mm}{\onelineskip}
+\setheadfoot{0mm}{11mm}
+\checkandfixthelayout[fixed]
+%\checkandfixthelayout[lines]
+
+% Widows and orphans fix (Висячие строки)
+\clubpenalty=10000
+\widowpenalty=10000
+
+% headers and footers
+\nouppercaseheads
+\makepagestyle{mystyle} 
+\setlength{\headwidth}{\textwidth}
+\makerunningwidth{mystyle}{\headwidth}
+\makeevenhead{mystyle}{\itshape\leftmark}{}{}
+\makeoddhead{mystyle}{}{}{\itshape\theauthor}
+\makeevenfoot{mystyle}{}{\includegraphics[width=1cm]{colonnumber_filled_left.eps}~\thepage~\includegraphics[width=1cm]{colonnumber_filled_right.eps}}{}
+\makeoddfoot{mystyle}{}{\includegraphics[width=1cm]{colonnumber_filled_left.eps}~\thepage~\includegraphics[width=1cm]{colonnumber_filled_right.eps}}{}
+\makeheadrule{mystyle}{\textwidth}{\normalrulethickness}
+\makepsmarks{mystyle}{\createmark{chapter}{left}{}{}{}}
+\makeatletter
+\makepsmarks{mystyle}{\createmark{chapter}{left}{shownumber}{\@chapapp\ }{:\ }}
+\makeatother
+
+\makepagestyle{endpage}
+\makerunningwidth{endpage}{\headwidth}
+\makeevenhead{endpage}{\itshape\leftmark}{}{}
+\makeoddhead{endpage}{}{}{\itshape\theauthor}
+\makeevenfoot{endpage}{}{}{}
+\makeoddfoot{endpage}{}{}{}
+\makeheadrule{endpage}{\textwidth}{\normalrulethickness}
+
+\makepagestyle{plain}
+\makerunningwidth{plain}{\headwidth}
+\makeevenfoot{plain}{}{\includegraphics[width=1cm]{colonnumber_filled_left.eps}~\thepage~\includegraphics[width=1cm]{colonnumber_filled_right.eps}}{}
+\makeoddfoot{plain}{}{\includegraphics[width=1cm]{colonnumber_filled_left.eps}~\thepage~\includegraphics[width=1cm]{colonnumber_filled_right.eps}}{}
+
+\pagestyle{mystyle}
+%\geometry{left = 2.5cm, right = 1.5cm, top = 1.5cm, bottom = 1.5cm}
+%\geometry{paperwidth=145mm,paperheight=200mm,hmargin={25mm,15mm},vmargin={15mm,15mm}}%
+
+% ===[ Page styles ]===
+\newcommand{\theweblink}[0]{}
+\newcommand{\weblink}[1]{\renewcommand{\theweblink}{ #1 } }
+    
+\author{} % compatibility fix for compilation without warnings
+\weblink{} % compatibility fix for compilation without warnings
+
+% Footnotes setup: added space between footnote number and text; Added QR footnote
+\makeatletter
+\renewcommand{\@makefntext}[1]{%
+  \parindent 1em%
+    \normalfont\textsuperscript{\@thefnmark}~#1
+}
+\makeatother
+
+\newcommand\qrfootnote[1]{%
+  \begingroup
+    \renewcommand\thefootnote{}%
+    \footnotetext{\hspace{-1em}\raisebox{-0.15em}{\includegraphics[width=1em]{qr_code_icon.eps}}#1}%
+  \endgroup
+}
+
+% Chapter title page style settings
+\usepackage{xcolor,fix-cm}
+
+\definecolor{numbercolor}{gray}{0.7}
+
+\newif\ifchapternonum
+\makechapterstyle{jenor}{
+    \renewcommand\printchaptername{}
+    \renewcommand\printchapternum{}
+    \renewcommand\printchapternonum{\chapternonumtrue}
+    \renewcommand\chaptitlefont{\fontfamily{pbk}\fontseries{db}%
+        \fontshape{n}\fontsize{30}{30}\selectfont\raggedleft}
+    \renewcommand\chapnumfont{\fontfamily{pbk}\fontseries{m}\fontshape{n}%
+        \fontsize{1in}{0in}\selectfont\color{numbercolor}}
+    \def\chapterheadstart{}
+    \renewcommand\printchaptertitle[1]{%
+        \ifdefempty{\theweblink}{}%
+            \qrfootnote{\theweblink}%
+        \noindent%
+        \ifchapternonum%
+            \begin{tabularx}%
+                {\textwidth}%
+                {X}%
+                {%
+                    \ifdefempty{\theweblink}%
+                        {\vbox to 0.9in{}}%
+                        {%
+                            \parbox[b]{\linewidth}%
+                                {%
+                                    \raggedleft%
+                                    \begin{pspicture}(0.9in, 0.9in)%
+                                        \psbarcode{\theweblink}{height=0.9 width=0.9}{qrcode}%
+                                    \end{pspicture}
+                                }%
+                            \vphantom{\raisebox{-15pt}{\chapnumfont 1}}%
+                        }%
+                } \\%
+                {%
+                    \parbox[b]{\linewidth}{\chaptitlefont ##1}%
+                    \vphantom{\raisebox{-15pt}{\chapnumfont 1}}%
+                }
+            \end{tabularx}%
+        \else
+            \begin{tabularx}{\textwidth}{lX}
+                \raisebox{-5pt}{\chapnumfont \thechapter}
+                & {\parbox[b]{\linewidth}{\chaptitlefont ##1}}%
+            \end{tabularx}%
+        \fi
+        \par\vskip2mm\hrule\vskip2mm
+        \hfill\theauthor
+    }
+}
+\chapterstyle{jenor}
+
+%\let\footruleskip\relax % for compatibility of memoir and fancyhdr
+%\let\rm\rmfamily        % for compatibility of memoir and blindtext (demo only)
+
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+%\fancyhf{} % clear all headers and footers
+%\renewcommand{\headrulewidth}{0pt} % remove rule between header and text
+%\fancyhead[LE,RO]{\thepage} % put page number in left header on even pages,
+                            % right header on odd pages
+%\fancyhead[RE]{\nouppercase{\leftmark}} % remove uppercase on chapter title
+%\renewcommand{\chaptermark}[1]{\markboth{#1}{}} % remove "Chapter N." prefix
+
+% ===[ Text format settings ]===
+
+%\onehalfspacing  % set 1.5 line spacing interval
+%\setlength{\parindent}{1.25cm}  % set paragraph first line indentation
+
+% ===[ extra aliases ]===
+
+\setcounter{secnumdepth}{-1} % remove (disable) numbering from chapters
+
+\colorlet{shadecolor}{gray!20}
+
+\makeatletter
+
+\newcommand{\bookparsep}[0]{%
+    \begin{center} \includegraphics[width=0.5cm]{colonnumber_filled_left.eps} \includegraphics[width=0.5cm]{colonnumber_filled_right.eps} \end{center}
+}
+
+\renewcommand{\l@chapter}[2]{%
+  \l@chapapp{\uppercase{#1}}{#2}{\cftchaptername}}
+\makeatother
+
+\usepackage{framed}
+\newenvironment{highlight}
+    {\def\FrameCommand{\fboxsep=\topsep\colorbox{shadecolor}}%
+    \MakeFramed {\hsize=\dimexpr \stockwidth+3mm \everypar{\parshape 1 \dimexpr\parindent+9.5mm \headwidth } \FrameRestore}}%
+{\endMakeFramed}
+
+
+% Add empty pages to fill total pages count up to number divisible by 4
+\makeatletter
+\newcommand{\checkmultipleoffour}{%
+  \newpage %<---!
+  \thispagestyle{empty}
+  \count@=\the\c@page%<---
+  \@tempcnta=\count@
+  \divide\@tempcnta by 4
+  \multiply\@tempcnta by 4
+  \count@=\numexpr\count@-\@tempcnta\relax
+  \ifnum\count@>0
+    \pagestyle{empty}
+    \loop\ifnum\count@<4
+      \null\clearpage
+      \advance\count@\@ne
+    \repeat
+  \fi
+}
+
+\makeatother
+%

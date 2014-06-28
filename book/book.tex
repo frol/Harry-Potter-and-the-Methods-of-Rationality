@@ -1,0 +1,27 @@
+% Copyright 2011-2014 Frol (c) <frolvlad@gmail.com>
+%/
+\nonstopmode
+\include{preamble}
+
+\begin{document}
+
+%\setcounter{page}{2}  % start counting including the title page
+
+\lefthyphenmin=4
+\righthyphenmin=5
+
+\input{blocks/_title}
+
+\renewcommand{\contentsname}{Contents}
+\renewcommand*{\cftchapterdotsep}{\cftdotsep}
+\renewcommand*{\cftchapterfont}{\normalfont}
+\renewcommand*{\cftchapterpagefont}{\normalfont}
+\tableofcontents*
+\thispagestyle{empty} % remove page number on table of contents page
+\newpage
+
+\input{blocks/_content}
+
+\input{blocks/_end}
+
+\end{document}

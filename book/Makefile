@@ -28,27 +28,18 @@ TEXINPUTS = $(GRAPHICS_PATH):
 
 # directory for latex auxiliary and temporary files
 AUX_DIR = build
-TEX = TEXINPUTS=$(TEXINPUTS) latex --output-directory=$(AUX_DIR)
-#TEX2HTML = TEXINPUTS=$(TEXINPUTS) latex2html --dir $(AUX_DIR) --rootdir $(AUX_DIR)
-#TEX2HTML = TEXINPUTS=$(TEXINPUTS) htlatex
-#TEX2HTML_OPTIONS = 
-DVIPS = TEXINPUTS=$(TEXINPUTS) dvips
+TEX = TEXINPUTS=$(TEXINPUTS) xelatex --no-pdf --output-directory=$(AUX_DIR)
+XDVIPDFMX = TEXINPUTS=$(TEXINPUTS) xdvipdfmx
 MAKEINDEX = makeindex
 EXCLUDE_PATTERN = --exclude=$(AUX_DIR)
 
 # sam2p is an image convertor from any format to EPS
 SAM2P = sam2p
 
-#$(target).html : $(target).tex 
-#	$(TEX2HTML) $(target).tex $(TEX2HTML_OPTIONS)
+$(AUX_DIR)/$(target).pdf : $(AUX_DIR)/$(target).xdv
+	$(XDVIPDFMX) -o $(AUX_DIR)/$(target).pdf $(AUX_DIR)/$(target).xdv
 
-$(AUX_DIR)/$(target).pdf : $(AUX_DIR)/$(target).ps
-	ps2pdf $(AUX_DIR)/$(target).ps $(AUX_DIR)/$(target).pdf
-
-$(AUX_DIR)/$(target).ps : $(AUX_DIR)/$(target).dvi
-	$(DVIPS) $(AUX_DIR)/$(target).dvi -o $(AUX_DIR)/$(target).ps
-
-$(AUX_DIR)/$(target).dvi : graphics preamble.tex $(target).tex blocks/* 
+$(AUX_DIR)/$(target).xdv : graphics preamble.tex $(target).tex blocks/* 
 	mkdir -p $(AUX_DIR)
 	# check for bibliography file and execute bibtex if needed
 	@if [ -f *.bib ] ; \
@@ -61,9 +52,8 @@ $(AUX_DIR)/$(target).dvi : graphics preamble.tex $(target).tex blocks/*
 		$(MAKEINDEX) $(AUX_DIR)/$(target).nlo -s nomencl.ist -o $(AUX_DIR)/$(target).nls ; \
 		fi
 	# run latex several times until all references are resolved from *.aux files
-	@while ($(TEX) $(target).tex && \
-		grep -q "Rerun to get " $(AUX_DIR)/$(target).log ); do \
-			echo "rebuilding until all references resolved..." ; \
+	@for i in `seq 3` ; \
+		do $(TEX) $(target).tex ; \
 		done
 
 GRAPHICS = $(wildcard $(GRAPHICS_PATH)/*.png)

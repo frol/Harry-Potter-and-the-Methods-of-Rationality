@@ -4,4 +4,6 @@
 *.out
 *.ps
 *.toc
+*.xdv
+*.bak
 tmp/

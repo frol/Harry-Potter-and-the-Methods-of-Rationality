@@ -5,18 +5,40 @@
 %\documentclass[10pt,dropping,showtrims]{memoir}
 \documentclass[10pt,dropping]{memoir}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T2A]{fontenc}
+\usepackage{fontspec}
+
+\defaultfontfeatures{Ligatures=TeX}
+
+\newfontfamily{\booktitle}[
+    Path=fonts/,
+    Ligatures=TeX,
+]{Neocyr.otf}
+
+%\newfontfamily{\mainfonttt}[
+%\setmainfont[
+%    Path=fonts/,
+%    UprightFont=*-Regular.ttf,
+%    BoldFont=*-Bold.ttf,
+%    ItalicFont=*-Italic.ttf,
+%    Ligatures=TeX
+%]{Academy}
+
+%\setmainfont{Liberation Serif}
+\setmainfont{Georgia}
+
 %\usepackage{literat}
-\usepackage[english, russian]{babel}
-\usepackage[unicode,linktocpage=true]{hyperref}
+%\usepackage[english, russian]{babel}
+\usepackage{polyglossia}
+\setdefaultlanguage[variant=american]{english}
+%\usepackage[unicode,linktocpage=true]{hyperref}
+\usepackage[linktocpage=true]{hyperref}
 
 \usepackage{enumerate}      % for changing enumeration appearance
 \usepackage{graphicx}		% including pictures and graphics to the document
 %\usepackage[pdftex]{graphicx}
 \usepackage{indentfirst}	% for indenting first paragraph line
 \usepackage{wrapfig}		% for text wrapping around pictures
-\usepackage{pscyr}			% Cyrillic fonts
+%\usepackage{pscyr}			% Cyrillic fonts
 \usepackage{gensymb}		% degree and Celsius sign using
 \usepackage{geometry}		% page customizations
 %\usepackage[none]{hyphenat} % disable word breaking
